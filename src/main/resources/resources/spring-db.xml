@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx 
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+	<!-- 注册属性配置文件 -->
+	<context:property-placeholder location="classpath:resources/jdbc.properties,classpath:resources/ConnectionPool.properties" />
+	<!-- 配置数据源 -->
+	<bean id="c3p0dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<!-- 连接的四要素 -->
+		<property name="driverClass" value="${jdbc.driver}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<!-- 初始化连接数 -->
+		<property name="initialPoolSize" value="${pool.InitialPoolSize}" />
+		<!-- 最大连接数 -->
+		<property name="maxPoolSize" value="${pool.MaxPoolSize}" />
+		<!-- 最小连接数 -->
+		<property name="minPoolSize" value="${pool.MinPoolSize}" />
+		<!-- 连接数用完一次新增的数量 -->
+		<property name="acquireIncrement" value="${pool.AcquireIncrement}" />
+		<!-- 连接失败尝试的次数 -->
+		<property name="acquireRetryAttempts" value="${pool.AcquireRetryAttempts}" />
+		<!-- 最大空闲时间 -->
+		<property name="MaxIdleTime" value="${pool.MaxIdleTime}" />
+	</bean>
+	<bean id="druidataSource" class="com.alibaba.druid.pool.DruidDataSource">
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="url" value="${jdbc.url2}" />
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="initialSize" value="${pool.InitialPoolSize}" />
+		<property name="maxActive" value="${pool.MaxPoolSize}" />
+		<property name="maxIdle" value="${pool.MaxPoolSize}" />
+	</bean>
+	
+	<bean id="dynamicDataSource" class="com.hyz.evil.config.datasource.MultiDataSource">
+		<property name="targetDataSources">
+			<map key-type="java.lang.String">
+				<entry key="datasource1" value-ref="c3p0dataSource"/>
+				<entry key="datasource2" value-ref="druidataSource"/>
+			</map>
+		</property>
+		<property name="defaultTargetDataSource" ref="c3p0dataSource" />  
+	</bean>
+</beans>
+

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hyz.evil.dao.UserDao">
+	<!-- <resultMap type="RoleDO" id="rolemap">
+		<id column="id" property="id" />
+		<result column="code" property="code" />
+		<result column="name" property="name" />
+		<result column="remark" property="remark" />
+		<result column="createTime" property="createTime" />
+		<result column="editTime" property="editTime" />
+	</resultMap> -->
+	<select id="getUserInfo" resultType="com.hyz.evil.bean.User">
+		select * from tbl_user
+	</select>
+	
+	<select id="getQuestionInfo" resultType="com.hyz.evil.bean.Question">
+		select * from tb_question
+	</select>
+</mapper>
